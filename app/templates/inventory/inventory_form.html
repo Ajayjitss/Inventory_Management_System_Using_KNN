@@ -1,0 +1,149 @@
+{% extends 'after_login.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-lg rounded-3 overflow-hidden">
+                <!-- Card Header with Gradient Background -->
+                <div class="card-header bg-gradient-primary py-4">
+                    <h2 class="text-white text-center mb-0 fw-bold">
+                        <i class="fas fa-{% if inventory_item %}edit{% else %}plus-circle{% endif %} me-2"></i>
+                        {% if inventory_item %}Edit Inventory Item{% else %}Add New Inventory Item{% endif %}
+                    </h2>
+                </div>
+                
+                <!-- Card Body -->
+                <div class="card-body p-5">
+                    <form method="POST" class="needs-validation" novalidate>
+                        {{ form.hidden_tag() }}
+                        
+                        <!-- Item Name Field -->
+                        <div class="mb-4">
+                            <label for="id_name" class="form-label fw-medium text-secondary">Item Name</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light">
+                                    <i class="fas fa-tag text-primary"></i>
+                                </span>
+                                {{ form.name(class="form-control form-control-lg py-2", placeholder="Enter item name") }}
+                            </div>
+                            {% for error in form.name.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Quantity and Price Fields -->
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label for="id_quantity" class="form-label fw-medium text-secondary">Quantity</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light">
+                                        <i class="fas fa-boxes text-primary"></i>
+                                    </span>
+                                    {{ form.quantity(class="form-control form-control-lg py-2", placeholder="0") }}
+                                </div>
+                                {% for error in form.quantity.errors %}
+                                    <div class="invalid-feedback d-block">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <label for="id_price" class="form-label fw-medium text-secondary">Price</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light">
+                                        <i class="fas fa-dollar-sign text-primary"></i>
+                                    </span>
+                                    {{ form.price(class="form-control form-control-lg py-2", placeholder="0.00") }}
+                                </div>
+                                {% for error in form.price.errors %}
+                                    <div class="invalid-feedback d-block">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Vendor Field -->
+                        <div class="mb-4">
+                            <label for="id_vendor" class="form-label fw-medium text-secondary">Vendor</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light">
+                                    <i class="fas fa-truck text-primary"></i>
+                                </span>
+                                {{ form.vendor(class="form-select form-control-lg py-2") }}
+                            </div>
+                            {% for error in form.vendor.errors %}
+                                <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="d-flex justify-content-between align-items-center pt-3">
+                            <a href="{{ url_for('inventory.inventory_list') }}" class="btn btn-outline-secondary rounded-pill px-4">
+                                <i class="fas fa-arrow-left me-2"></i>Back to Inventory
+                            </a>
+                            <button type="submit" class="btn btn-primary rounded-pill px-4 py-2 fw-bold">
+                                <i class="fas fa-save me-2"></i>
+                                {% if inventory_item %}Update Item{% else %}Create Item{% endif %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+
+
+  .form-control-lg{
+    font-size: 1rem !important;
+  }
+
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.25);
+    }
+    
+    .rounded-3 {
+        border-radius: 1rem !important;
+    }
+    
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .invalid-feedback {
+        display: none;
+        width: 100%;
+        margin-top: 0.25rem;
+        font-size: 0.875em;
+        color: #dc3545;
+    }
+    
+    .was-validated .form-control:invalid ~ .invalid-feedback,
+    .was-validated .form-control:invalid ~ .invalid-feedback,
+    .form-control.is-invalid ~ .invalid-feedback {
+        display: block;
+    }
+    
+    .rounded-pill {
+        border-radius: 50rem !important;
+    }
+    
+    .input-group-text {
+        transition: all 0.3s ease;
+    }
+    
+    .form-control:focus + .input-group-text {
+        background-color: #e2e8f0;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,10 @@
+flask db init
+
+Create a Migration
+flask db migrate -m "Initial migration"
+
+Apply the Migrations
+flask db upgrade
+
+
+flask db downgrade

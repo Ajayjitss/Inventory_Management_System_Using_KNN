@@ -1,0 +1,401 @@
+/* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f7fc;
+    margin: 0;
+    padding: 0;
+}
+
+/* Main container */
+.container {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+
+
+
+
+
+
+/* Navbar Styles */
+.navbar {
+    background-color: #343a40;
+    padding: 10px 30px;  /* Adjust padding for better spacing */
+}
+
+.navbar a {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    margin-right: 15px;
+    border-radius: 5px;
+    font-size: 1.1rem;
+}
+
+.navbar a:hover {
+    background-color: #575757;
+}
+
+.navbar .navbar-brand {
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+/* Separator Styling */
+.navbar-separator {
+    color: #fff;
+    font-size: 1.5rem;
+    padding: 0 10px;
+}
+
+/* For making the navbar more responsive */
+@media (max-width: 768px) {
+    .navbar-nav {
+        text-align: center;
+    }
+
+    .navbar-nav li {
+        margin-bottom: 10px;
+    }
+}
+
+.navbar-nav .nav-link.active {
+    background-color: #007bff;
+    color: white !important;
+    border-radius: 5px;
+}
+
+/* Ensure navbar items are in a row */
+.navbar-nav {
+    display: flex;
+    flex-direction: row; /* Align items in a row */
+    gap: 15px; /* Space between items */
+}
+
+/* Prevent default block display of list items */
+.navbar-nav .nav-item {
+    display: inline-block;
+}
+
+/* Make sure separators align well */
+.navbar-nav .text-white {
+    font-size: 1.5rem;
+    padding: 0 10px;
+}
+
+
+
+
+
+
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #f7f7f7;
+    font-weight: bold;
+}
+
+td a {
+    text-decoration: none;
+    padding: 6px 10px;
+    border-radius: 5px;
+}
+
+td a:hover {
+    opacity: 0.8;
+}
+
+td a.edit {
+    background-color: #ffc107;
+    color: #fff;
+}
+
+td a.delete {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+table tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+/* Button Styles */
+button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    padding: 10px 15px;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+button:disabled {
+    background-color: #ccc;
+}
+
+/* Form Styles */
+/* Main container */
+.container {
+    max-width: 800px; /* Set a max-width for the container */
+    margin: 50px auto; /* Center the container horizontally */
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Form Styles */
+form {
+    width: 100%; /* Ensure the form takes full width of the container */
+    max-width: 600px; /* Limit form width to make it look nice */
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+}
+
+/* Form Inputs */
+form input, form select, form button {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+}
+
+form button {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+}
+
+form button:hover {
+    background-color: #218838;
+}
+
+
+
+form .invalid-feedback {
+    color: red;
+    font-size: 0.9rem;
+}
+
+h2 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 20px;
+}
+/* styles.css */
+.invalid-feedback {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
+
+
+/* Global styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Container to center the page */
+  .sale-container {
+    max-width: 900px;
+    margin: auto;
+    padding: 30px;
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
+  
+  /* Header */
+  .sale-header {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 30px;
+  }
+  
+  /* Form styling */
+  .sale-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Dropdown styling */
+  .sale-form .form-control {
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+  }
+  
+  /* Add Product button */
+  .add-product-btn {
+    background-color: #28a745;
+    color: white;
+    border-radius: 5px;
+    padding: 8px 20px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .add-product-btn:hover {
+    background-color: #218838;
+  }
+  
+  /* Table styling */
+ 
+  /* Label Styling */
+.form-label {
+    margin-bottom: 15px; /* Adds vertical space below the label */
+}
+
+/* Specific adjustments for the Selected Products section */
+#selected-products .form-label {
+    margin-bottom: 0; /* No extra space below this label */
+}
+
+/* Table Styling for Products */
+.product-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.product-table th,
+.product-table td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.product-table th {
+    background-color: #f1f1f1;
+    font-weight: bold;
+}
+
+.product-table td input {
+    width: 100%;
+    padding: 6px;
+    border-radius: 5px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+}
+
+.product-table td .remove-product-btn {
+    padding: 5px 12px;
+    background-color: #dc3545;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+.product-table td .remove-product-btn:hover {
+    background-color: #c82333;
+}
+
+/* Price and Quantity Fields */
+.product-table .price,
+.product-table .qty {
+    width: 50%;
+    text-align: center;  /* Center the input text */
+    margin: 0 auto;
+}
+
+/* Total Sale Value */
+.sale-total-value {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f1f1f1;
+    margin-top: 15px;
+}
+
+/* Create Sale button */
+.create-sale-btn {
+    padding: 12px 30px;
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border: none;
+}
+
+.create-sale-btn:hover {
+    background-color: #0056b3;
+}
+
+.sale-form #customer_id,
+.sale-form #product-dropdown{
+    margin-top: 15px;
+}
+.sale-form .total-value{
+    margin-top: 15px;
+}
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .sale-container {
+        padding: 20px;
+    }
+
+    .sale-form .form-control,
+    .add-product-btn,
+    .create-sale-btn {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .product-table td input,
+    .product-table td .remove-product-btn {
+        font-size: 12px;
+        padding: 6px;
+    }
+
+    .product-table th,
+    .product-table td {
+        padding: 10px;
+    }
+
+    .sale-total-value {
+        font-size: 16px;
+    }
+}

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice #{{ sale.id }}</title>
+    <style type="text/css">
+        /* PDF-compatible styles */
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333333;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+        
+        .invoice-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px;
+            background: white;
+        }
+        
+        .header {
+            display: block;
+            overflow: hidden;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .invoice-title {
+            float: left;
+            font-size: 24px;
+            font-weight: bold;
+            color: #4f46e5;
+            margin: 0 0 10px 0;
+        }
+        
+        .invoice-meta {
+            float: left;
+            clear: left;
+            color: #666666;
+            font-size: 13px;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            background-color: #10b981;
+            color: white;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-left: 8px;
+        }
+        
+        .company-info {
+            float: right;
+            text-align: right;
+        }
+        
+        .company-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #4f46e5;
+            margin: 0 0 5px 0;
+        }
+        
+        .company-details {
+            color: #666666;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+        
+        .customer-info {
+            background: #f8f9fa;
+            padding: 15px;
+            margin-bottom: 25px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+        }
+        
+        .section-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: #4f46e5;
+            margin: 0 0 10px 0;
+            text-transform: uppercase;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+        }
+        
+        thead th {
+            background-color: #4f46e5;
+            color: white;
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: bold;
+        }
+        
+        tbody td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .totals {
+            background: #f8f9fa;
+            padding: 15px;
+            margin-top: 25px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+        }
+        
+        .total-row {
+            display: block;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+        
+        .total-row span:first-child {
+            float: left;
+        }
+        
+        .total-row span:last-child {
+            float: right;
+        }
+        
+        .grand-total {
+            font-size: 16px;
+            font-weight: bold;
+            color: #4f46e5;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #666666;
+            font-size: 13px;
+        }
+        
+        .thank-you {
+            font-size: 15px;
+            color: #4f46e5;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .payment-terms {
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice-container">
+        <div class="header">
+            <div class="invoice-title">INVOICE</div>
+            <div class="invoice-meta">
+                #{{ sale.id }} <br>
+                Issued: {{ sale.date.strftime('%b %d, %Y') }}
+            </div>
+            <div class="company-info">
+                <div class="company-name">Your Company</div>
+                <div class="company-details">
+                    123 Business Street<br>
+                    City, State 12345<br>
+                    Phone: (123) 456-7890<br>
+                    Email: info@yourcompany.com<br>
+                    VAT: US123456789
+                </div>
+            </div>
+        </div>
+        
+        <div class="customer-info">
+            <div class="section-title">Bill To</div>
+            <div style="font-weight: bold;">{{ sale.customer.name }}</div>
+            <div>{{ sale.customer.email }}</div>
+            {% if sale.customer.address %}
+            <div>{{ sale.customer.address }}</div>
+            {% endif %}
+        </div>
+        
+        <div class="section-title">Items</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Qty</th>
+                    <th>Unit Price</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in sale.sale_products %}
+                <tr>
+                    <td>{{ item.inventory.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>${{ "%.2f"|format(item.product_price) }}</td>
+                    <td>${{ "%.2f"|format(item.product_price * item.quantity) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <div class="totals">
+            <div class="total-row">
+                <span>Subtotal</span>
+                <span>${{ "%.2f"|format(sale.total_value) }}</span>
+            </div>
+            <div class="total-row">
+                <span>Tax (10%)</span>
+                <span>${{ "%.2f"|format(tax) }}</span>
+            </div>
+            <div class="total-row grand-total">
+                <span>Total Due</span>
+                <span>${{ "%.2f"|format(grand_total) }}</span>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <div class="thank-you">Thank you for your business!</div>
+            <div class="payment-terms">Payment due within 30 days</div>
+            <div style="margin-top: 8px;">
+                Questions? Email accounting@yourcompany.com
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,252 @@
+{% extends 'after_login.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="card border-0 shadow-lg rounded-3 overflow-hidden">
+        <!-- Card Header -->
+        <div class="card-header bg-gradient-primary py-4">
+            <h2 class="text-white text-center mb-0 fw-bold">
+                <i class="fas fa-cash-register me-2"></i>Create Sale
+            </h2>
+        </div>
+        
+        <!-- Card Body -->
+        <div class="card-body p-5">
+            <form class="sale-form" id="sale-form">
+                {{ form.hidden_tag() }} <!-- CSRF token -->
+
+                <!-- Customer Selection -->
+                <div class="mb-4">
+                    <label for="customer_id" class="form-label fw-medium text-secondary">Customer</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light">
+                            <i class="fas fa-user-tie text-primary"></i>
+                        </span>
+                        {{ form.customer_id(class="form-control") }}
+                    </div>
+                    {% for error in form.customer_id.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <!-- Product Selection -->
+                <div class="mb-4">
+                    <label for="product-dropdown" class="form-label fw-medium text-secondary">Select Product</label>
+                    <div class="input-group">
+                        <select class="form-control" id="product-dropdown" name="product_id">
+                            <option value="" selected disabled>Select a product</option>
+                            {% for product in form.products[0].product_id.choices %}
+                                <option value="{{ product[0] }}" data-price="{{ product[2] }}">{{ product[1] }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="button" class="btn btn-success ms-2 add-product-btn" id="add-product-btn">
+                            <i class="fas fa-plus"></i> Add
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product List -->
+                <div class="mb-4">
+                    <label for="selected-products" class="form-label fw-medium text-secondary">Selected Products</label>
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="product-list">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th>Product Name</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Dynamically added products will go here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Total Sale Value -->
+                <div class="mb-4">
+                    <label for="total-value" class="form-label fw-medium text-secondary">Total Sale Value</label>
+                    <input type="text" id="total-value" class="form-control sale-total-value" readonly value="0.00">
+                </div>
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg px-5 py-2">
+                        <i class="fas fa-save me-2"></i>Create Sale
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!-- Select2 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+   
+    
+        // Add event listener to the Add Product button
+        document.getElementById('add-product-btn').addEventListener('click', function() {
+            const productDropdown = document.getElementById('product-dropdown');
+            const selectedOption = productDropdown.options[productDropdown.selectedIndex];
+            const productId = selectedOption.value;
+            const productName = selectedOption.text.split(' - ')[0]; // Extracting the name part
+            const productPrice = parseFloat(selectedOption.getAttribute('data-price')); // Extracting the price part
+            const csrfToken = document.querySelector('input[name="csrf_token"]').value;
+    
+            // If a valid product is selected
+            if (productId && !isNaN(productPrice)) {
+                addProductToList(productId, productName, productPrice, csrfToken);
+                // Clear the dropdown after adding the product
+                $('#product-dropdown').val(null).trigger('change');
+            }
+        });
+    
+        // Function to add selected product to the list
+        function addProductToList(productId, productName, productPrice, csrfToken) {
+            console.log(productId, productName, productPrice, "productId, productName, productPrice");
+            const productList = document.getElementById('product-list').getElementsByTagName('tbody')[0];
+            const row = document.createElement('tr');
+            
+            // Get the quantity value
+            const quantity = 1; // Set the default quantity as 1 (or use row.querySelector('.qty').value if editable)
+            
+            row.innerHTML = `
+                <td>${productName}</td>
+                <td><input type="number" class="form-control qty" value="${quantity}" min="1" data-price="${productPrice}" /></td>
+                <td><input type="number" class="form-control price" value="${productPrice.toFixed(2)}" step="1" /></td>
+                <td><button type="button" class="btn btn-danger btn-sm remove-product-btn">Remove</button></td>
+                
+                <!-- Hidden fields to pass product details with the form -->
+                <input type="hidden" name="products[][product_id]" value="${productId}">
+                <input type="hidden" name="products[][product_price]" value="${productPrice}">
+                <input type="hidden" name="products[][quantity]" value="${quantity}"> <!-- Add quantity here -->
+                <input type="hidden" name="products[][csrf_token]" value="${csrfToken}">
+            `;
+            
+            productList.appendChild(row);
+            
+            // Bind remove button
+            row.querySelector('.remove-product-btn').addEventListener('click', function() {
+                row.remove();
+                updateTotal();
+            });
+            
+            // Bind quantity change
+            row.querySelector('.qty').addEventListener('input', function() {
+                updateTotal();
+            });
+            
+            // Bind price change
+            row.querySelector('.price').addEventListener('input', function() {
+                updateTotal();
+            });
+            
+            updateTotal();
+        }
+        
+        // Function to update the total price
+        function updateTotal() {
+            let total = 0;
+            document.querySelectorAll('#product-list tbody tr').forEach(function(row) {
+                const qty = row.querySelector('.qty').value;
+                const price = row.querySelector('.price').value;
+                total += parseFloat(price) * parseInt(qty);
+            });
+            document.getElementById('total-value').value = total.toFixed(2);
+        }
+    
+        // Handle the form submission via AJAX
+        $('#sale-form').submit(function(event) {
+            event.preventDefault(); // Prevent the form from submitting normally
+        
+            const formData = new FormData(this); // Get the form data
+            console.log(formData, "formData");
+        
+            // Prepare the JSON payload
+            const payload = {
+                customer_id: formData.get('customer_id'),
+                products: [],
+                csrf_token: formData.get('csrf_token')
+            };
+        
+            // Loop through the products
+            $("input[name='products[][product_id]']").each(function(index) {
+                payload.products.push({
+                    product_id: $(this).val(),
+                    product_price: $("input[name='products[][product_price]']").eq(index).val(),
+                    quantity: $("input[name='products[][quantity]']").eq(index).val() // Add quantity here
+                });
+            });
+        
+            // Send the request
+            $.ajax({
+                type: 'POST',
+                url: '/sales/sale_create',
+                data: JSON.stringify(payload),
+                contentType: 'application/json',
+                success: function(response) {
+                    if (response.success) {
+                        alert('Sale created successfully!');
+                        window.location.href = '/sales/sale_list';
+                    } else {
+                        alert('Error: ' + response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                    alert('Something went wrong. Please try again.');
+                }
+            });
+        });
+    });
+</script>
+
+<style>
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+    }
+    
+    .card {
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-2px);
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.25);
+    }
+    
+    .input-group-text {
+        background-color: #f8f9fa;
+        transition: all 0.3s ease;
+    }
+    
+    .table-hover tbody tr:hover {
+        background-color: rgba(37, 99, 235, 0.03);
+    }
+    
+    .invalid-feedback {
+        display: none;
+        width: 100%;
+        margin-top: 0.25rem;
+        font-size: 0.875em;
+        color: #dc3545;
+    }
+    
+    .was-validated .form-control:invalid ~ .invalid-feedback,
+    .form-control.is-invalid ~ .invalid-feedback {
+        display: block;
+    }
+</style>
+{% endblock %}

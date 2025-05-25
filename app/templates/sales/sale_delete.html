@@ -1,0 +1,13 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h2>Delete Sale</h2>
+    <p>Are you sure you want to delete the sale with ID {{ sale.id }} made to {{ sale.customer.name }}?</p>
+
+    <form method="POST">
+      <button type="submit" class="btn btn-danger">Delete Sale</button>
+      <a href="{{ url_for('sales.sale_list') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+  </div>
+{% endblock %}

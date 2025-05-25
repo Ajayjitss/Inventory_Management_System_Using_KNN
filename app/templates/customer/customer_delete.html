@@ -1,0 +1,11 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+    <h2>Are you sure you want to delete this customer?</h2>
+    <p><strong>Customer Name:</strong> {{ customer.name }}</p>
+    <form method="post">
+        {{ form.hidden_tag() }}
+        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+        <a href="{{ url_for('customer.customer_list') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+{% endblock %}

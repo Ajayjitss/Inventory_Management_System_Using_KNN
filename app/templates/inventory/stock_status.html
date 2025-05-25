@@ -1,0 +1,111 @@
+{% extends 'after_login.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="card border-0 shadow-lg rounded-3 overflow-hidden">
+        <!-- Card Header -->
+        <div class="card-header bg-gradient-primary py-4">
+            <h2 class="text-white text-center mb-0 fw-bold">
+                <i class="fas fa-boxes me-2"></i>Stock Status
+            </h2>
+        </div>
+        
+        <!-- Card Body -->
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="ps-4 fw-medium text-secondary">
+                                <div class="d-flex align-items-center">
+                                    ID
+                                    <a href="{{ url_for('inventory.stock_status', sort_by='id', order='asc' if order == 'desc' else 'desc') }}" class="ms-2 text-decoration-none">
+                                        <i class="fas fa-sort{% if sort_by == 'id' %}-{% if order == 'asc' %}up{% else %}down{% endif %}{% endif %}"></i>
+                                    </a>
+                                </div>
+                            </th>
+                            <th class="fw-medium text-secondary">Product Name</th>
+                            <th class="fw-medium text-secondary">
+                                <div class="d-flex align-items-center">
+                                    Current Stock
+                                    <a href="{{ url_for('inventory.stock_status', sort_by='quantity', order='asc' if order == 'desc' else 'desc') }}" class="ms-2 text-decoration-none">
+                                        <i class="fas fa-sort{% if sort_by == 'quantity' %}-{% if order == 'asc' %}up{% else %}down{% endif %}{% endif %}"></i>
+                                    </a>
+                                </div>
+                            </th>
+                            <th class="fw-medium text-secondary">
+                                <div class="d-flex align-items-center">
+                                    Minimum Stock
+                                    <a href="{{ url_for('inventory.stock_status', sort_by='minimum_stock_required', order='asc' if order == 'desc' else 'desc') }}" class="ms-2 text-decoration-none">
+                                        <i class="fas fa-sort{% if sort_by == 'minimum_stock_required' %}-{% if order == 'asc' %}up{% else %}down{% endif %}{% endif %}"></i>
+                                    </a>
+                                </div>
+                            </th>
+                            <th class="fw-medium text-secondary">
+                                <div class="d-flex align-items-center">
+                                    Last Checked
+                                    <a href="{{ url_for('inventory.stock_status', sort_by='last_checked_at', order='asc' if order == 'desc' else 'desc') }}" class="ms-2 text-decoration-none">
+                                        <i class="fas fa-sort{% if sort_by == 'last_checked_at' %}-{% if order == 'asc' %}up{% else %}down{% endif %}{% endif %}"></i>
+                                    </a>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in inventory_items %}
+                        <tr>
+                            <td class="ps-4">{{ item.id }}</td>
+                            <td class="fw-medium">{{ item.name }}</td>
+                            <td>
+                                <span class="badge {% if item.quantity < item.minimum_stock_required %}bg-danger bg-opacity-10 text-danger{% else %}bg-success bg-opacity-10 text-success{% endif %} rounded-pill px-3 py-2">
+                                    {{ item.quantity }}
+                                </span>
+                            </td>
+                            <td>{{ item.minimum_stock_required }}</td>
+                            <td>{{ item.last_checked_at.strftime('%b %d, %Y %I:%M %p') if item.last_checked_at else 'Never' }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+    }
+    
+    .card {
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-2px);
+    }
+    
+    .table-hover tbody tr:hover {
+        background-color: rgba(37, 99, 235, 0.03);
+    }
+    
+    .badge {
+        font-weight: 500;
+        font-size: 0.85rem;
+    }
+    
+    .bg-opacity-10 {
+        background-color: rgba(var(--bs-primary-rgb), 0.1) !important;
+    }
+    
+    .rounded-pill {
+        border-radius: 50rem !important;
+    }
+    
+    .text-secondary {
+        color: #64748b !important;
+    }
+</style>
+{% endblock %}

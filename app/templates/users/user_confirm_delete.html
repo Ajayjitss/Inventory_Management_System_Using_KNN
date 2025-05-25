@@ -1,0 +1,11 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+    <h2>Are you sure you want to delete this user?</h2>
+    <p><strong>Username:</strong> {{ user.username }}</p>
+    <form method="post">
+        {{ form.hidden_tag() }}
+        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+        <a href="{{ url_for('users.user_list') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+{% endblock %}

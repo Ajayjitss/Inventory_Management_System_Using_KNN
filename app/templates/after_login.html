@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Inventory Management{% endblock %}</title>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb; /* Modern blue */
+            --primary-dark: #1e40af; /* Darker blue */
+            --secondary: #10b981; /* Teal accent */
+            --light: #f8fafc; /* Light background */
+            --dark: #1e293b; /* Dark text */
+            --gray: #64748b; /* Secondary text */
+            --card-bg: #ffffff; /* Card background */
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.6;
+        }
+
+        /* Modern Navbar */
+        .navbar {
+            background-color: var(--primary);
+            box-shadow: var(--shadow);
+            padding: 1rem 2rem;
+            margin: 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.7rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            letter-spacing: -0.5px;
+        }
+
+        .navbar-brand i {
+            margin-right: 12px;
+            font-size: 1.5rem;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+            padding: 0.6rem 1rem;
+            margin: 0 0.3rem;
+            border-radius: 6px;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .nav-link.active {
+            color: white !important;
+            font-weight: 600;
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 15%;
+            width: 70%;
+            height: 3px;
+            /* background-color: var(--secondary); */
+            border-radius: 3px;
+        }
+
+        .logout-btn {
+            color: white !important;
+            background-color: rgba(239, 68, 68, 0.9);
+        }
+
+        .logout-btn:hover {
+            background-color: rgba(239, 68, 68, 1) !important;
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            padding: 3rem 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            padding: 0 2rem;
+        }
+
+        /* Cards */
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            background-color: var(--card-bg);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background-color: var(--primary);
+            border: none;
+            padding: 0.5rem 1.25rem;
+            border-radius: 6px;
+            transition: var(--transition);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            border: none;
+            padding: 0.5rem 1.25rem;
+            border-radius: 6px;
+            transition: var(--transition);
+        }
+
+        .btn-secondary:hover {
+            background-color: #0d9488;
+            transform: translateY(-2px);
+        }
+
+        /* Alerts */
+        .alert {
+            border-radius: 8px;
+            border: none;
+        }
+
+      /* Footer */
+.footer {
+    background-color: var(--dark);
+    color: white;
+    
+    text-align: center;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    text-align: left;
+}
+
+.footer-column h3 {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    display: inline-block;
+}
+
+.footer-column h3::after {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 2px;
+    background-color: var(--accent);
+    bottom: -5px;
+    left: 0;
+}
+
+.footer-links {
+    list-style: none;
+}
+
+.footer-links li {
+    margin-bottom: 0.8rem;
+}
+
+.footer-links a {
+    color: #adb5bd;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer-links a:hover {
+    color: white;
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.social-links a {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.1);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+}
+
+.social-links a:hover {
+    background-color: var(--accent);
+    transform: translateY(-3px);
+}
+
+.copyright {
+    
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: #adb5bd;
+    font-size: 0.9rem;
+}
+        /* Auth Pages Specific */
+        .auth-page .navbar {
+            justify-content: center;
+        }
+
+        .auth-page .navbar-collapse {
+            display: none !important;
+        }
+
+        /* Table styling */
+        table {
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+        }
+
+        th {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 500;
+            padding: 0.75rem 1rem;
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        tr:hover td {
+            background-color: #f1f5f9;
+        }
+
+        /* Form elements */
+        .form-control {
+            border-radius: 6px;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #cbd5e1;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+            }
+
+            .nav-link {
+                margin: 0.2rem 0;
+            }
+        }
+    </style>
+</head>
+<body class="{% if request.endpoint in ['users.login', 'users.register'] %}auth-page{% endif %}">
+    <!-- Modern Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('inventory.inventory_list') if current_user.is_authenticated else url_for('users.login_view') }}">
+                <i class="fas fa-boxes"></i> InventoryPro
+            </a>
+            
+            {% if current_user.is_authenticated and not request.endpoint in ['users.login', 'users.register'] %}
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <i class="fas fa-bars text-white"></i>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'users.user_list' %}active{% endif %}" href="{{ url_for('users.user_list') }}">
+                            <i class="fas fa-users me-1"></i> Users
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'inventory.inventory_list' %}active{% endif %}" href="{{ url_for('inventory.inventory_list') }}">
+                            <i class="fas fa-box-open me-1"></i> Inventory
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'inventory.vendor_list' %}active{% endif %}" href="{{ url_for('inventory.vendor_list') }}">
+                            <i class="fas fa-truck me-1"></i> Vendors
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'customer.customer_list' %}active{% endif %}" href="{{ url_for('customer.customer_list') }}">
+                            <i class="fas fa-user-tie me-1"></i> Customers
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'sales.sale_list' %}active{% endif %}" href="{{ url_for('sales.sale_list') }}">
+                            <i class="fas fa-receipt me-1"></i> Sales
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'inventory.stock_status' %}active{% endif %}" href="{{ url_for('inventory.stock_status') }}">
+                            <i class="fas fa-clipboard-check me-1"></i> Stock Status
+                        </a>
+                    </li>
+                    
+                    <!-- Logout Button -->
+                    <li class="nav-item">
+                        <a class="nav-link logout-btn" href="{{ url_for('users.logout') }}">
+                            <i class="fas fa-sign-out-alt me-1"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        {% block content %}
+        {% endblock %}
+    </main>
+
+     <!-- Footer -->
+     <footer class="footer">
+        
+           
+        
+        <div class="copyright">
+            <p>&copy; 2025 Inventory Pro. All rights reserved.</p>
+        </div>
+    </footer>
+    <!-- JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
