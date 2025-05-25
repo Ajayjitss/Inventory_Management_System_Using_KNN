@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container py-5">
     <h2 class="mb-4">
-        <i class="fas fa-file-invoice me-2 text-primary"></i> Invoice #{{ sale.id }}
+        <i class="fas fa-file-invoice me-2 text-primary"></i> Sale #{{ sale.id }}
     </h2>
     
     <div class="card p-4 shadow-sm rounded-3">
@@ -37,10 +37,11 @@
         </table>
 
         <div class="text-end mt-4">
-            <p><strong>Subtotal:</strong> ${{ "%.2f"|format(sale.total_value) }}</p>
-            {% set tax = sale.total_value * 0.10 %}
-            <p><strong>Tax (10%):</strong> ${{ "%.2f"|format(tax) }}</p>
-            <p><strong>Grand Total:</strong> ${{ "%.2f"|format(sale.total_value + tax) }}</p>
+            <div class="text-end mt-4">
+                <p><strong>Subtotal:</strong> ${{ "%.2f"|format(sale.total_value) }}</p>
+                <p><strong>Tax (10%):</strong> ${{ "%.2f"|format(tax) }}</p>
+                <p><strong>Grand Total:</strong> ${{ "%.2f"|format(grand_total) }}</p>
+            </div>
         </div>
 
         <a href="{{ url_for('sales.sale_list') }}" class="btn btn-secondary mt-3">Back to Sales List</a>
